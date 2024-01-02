@@ -40,7 +40,9 @@ def predict_cause_of_death(year, gender):
 
 # Example usage
 year = 2024
-gender = 'Male (男性)'
+#gender = 'Male (男性)'
+gender = 'Female (女性)'
+#gender = 'Total (總計)'
 example_prediction = predict_cause_of_death(year, gender)
 print("Most likely cause of death for", gender, "in Taipei in the year", year, ":", example_prediction)
 

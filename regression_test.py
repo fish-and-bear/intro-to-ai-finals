@@ -73,24 +73,27 @@ print(table)
 
 # Visualization - Bar Chart for a specific year
 specific_year = 2024
-year_data = synthetic_data[synthetic_data['Year (年份)'] == specific_year]
+#specific_gender = 'Male (男性)'
+specific_gender = 'Female (女性)'
+#specific_gender = 'Total (總計)'
+year_data = synthetic_data[(synthetic_data['Year (年份)'] == specific_year) & (synthetic_data['Gender (性別)'] == specific_gender)]
 
 # Grouping data by 'Cause of Death' and summing the predicted proportions
-grouped_data = year_data.groupby('Cause of Death (疾病死因)')['Predicted Proportion of Deaths'].sum()
+grouped_data = year_data.groupby('Cause of Death (疾病死因)', as_index=False)['Predicted Proportion of Deaths'].sum()
 
 # Exclude 'All Causes of Death' from the data
-grouped_data = grouped_data[grouped_data.index != 'All Causes of Death (所有死因)']
+grouped_data = grouped_data[grouped_data['Cause of Death (疾病死因)'] != 'All Causes of Death (所有死因)']
 
 # Sorting data from highest to lowest
-grouped_data = grouped_data.sort_values(ascending=False).reset_index()
+grouped_data = grouped_data.sort_values(by='Predicted Proportion of Deaths', ascending=False)
 
 # Creating the bar chart
-plt.figure(figsize=(20, 10))  # Adjust figure size as needed
+plt.figure(figsize=(20, 10))
 sns.barplot(x='Cause of Death (疾病死因)', y='Predicted Proportion of Deaths', data=grouped_data, 
             palette='viridis', hue='Cause of Death (疾病死因)', dodge=False)
-plt.title(f'Predicted Death Proportions by Cause of Death in {specific_year}')
+plt.title(f'Predicted Death Proportions by Cause of Death in {specific_year} for {specific_gender}')
 plt.ylabel('Predicted Proportion of Deaths')
 plt.xlabel('Cause of Death')
-plt.xticks(rotation=90)  # Rotate x-axis labels to 90 degrees for better alignment
+plt.xticks(rotation=90)
 plt.show()
 

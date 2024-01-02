@@ -2,18 +2,15 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
-import joblib
 from sklearn.model_selection import train_test_split, RandomizedSearchCV
 from sklearn.preprocessing import StandardScaler, OneHotEncoder, PolynomialFeatures
 from sklearn.compose import ColumnTransformer
-from sklearn.pipeline import Pipeline, make_pipeline
+from sklearn.pipeline import Pipeline
 from sklearn.linear_model import LinearRegression, Lasso
 from sklearn.ensemble import GradientBoostingRegressor, RandomForestRegressor
 from sklearn.svm import SVR
 from sklearn.neighbors import KNeighborsRegressor
 from sklearn.metrics import mean_squared_error, r2_score, mean_absolute_error
-from sklearn.feature_selection import RFECV
-import shap
 import xgboost as xgb
 import catboost as cb
 import ipywidgets as widgets
@@ -79,9 +76,9 @@ param_distributions = {
         'model__max_depth': [3, 5, 7]
     },
     'XGBoost': {
-    'model__n_estimators': [100, 200, 300],
-    'model__learning_rate': [0.01, 0.1, 0.2],
-    'model__max_depth': [3, 5, 7]
+        'model__n_estimators': [100, 200, 300],
+        'model__learning_rate': [0.01, 0.1, 0.2],
+        'model__max_depth': [3, 5, 7]
     },
     'CatBoost': {
         'model__iterations': [100, 200, 300],
@@ -135,37 +132,6 @@ plt.xlabel('Metric', fontsize=14)
 plt.ylabel('Score', fontsize=14)
 plt.legend(title='Model')
 plt.show()
-
-
-# Training and evaluating each model with the best parameters
-for model_name, model in models.items():
-    pipeline = Pipeline(steps=[('preprocessor', preprocessor), ('model', model)])
-    pipeline.fit(X_train, y_train)
-    y_pred = pipeline.predict(X_test)
-    mse = mean_squared_error(y_test, y_pred)
-    rmse = np.sqrt(mse)
-    mae = mean_absolute_error(y_test, y_pred)
-    r2 = r2_score(y_test, y_pred)
-    model_performance[model_name] = {'MSE': mse, 'RMSE': rmse, 'MAE': mae, 'R2 Score': r2}
-
-# Model Ranking based on RMSE
-rmse_scores = {model: metrics['RMSE'] for model, metrics in model_performance.items()}
-best_model_name = min(rmse_scores, key=rmse_scores.get)
-best_model = models[best_model_name]
-
-# Dictionary to store model performances
-model_performance = {}
-
-# Training and evaluating each model with the best parameters
-for model_name, model in models.items():
-    pipeline = Pipeline(steps=[('preprocessor', preprocessor), ('model', model)])
-    pipeline.fit(X_train, y_train)
-    y_pred = pipeline.predict(X_test)
-    mse = mean_squared_error(y_test, y_pred)
-    rmse = np.sqrt(mse)
-    mae = mean_absolute_error(y_test, y_pred)
-    r2 = r2_score(y_test, y_pred)
-    model_performance[model_name] = {'MSE': mse, 'RMSE': rmse, 'MAE': mae, 'R2 Score': r2}
 
 # Model Ranking based on RMSE
 rmse_scores = {model: metrics['RMSE'] for model, metrics in model_performance.items()}
