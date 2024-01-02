@@ -39,8 +39,12 @@ def predict_cause_of_death(year, gender):
     return prediction[0]
 
 # Example usage
-example_prediction = predict_cause_of_death(2024, 'Male (男性)')
-print("Predicted Cause of Death:", example_prediction)
+year = 2024
+gender = 'Male (男性)'
+example_prediction = predict_cause_of_death(year, gender)
+print("Most likely cause of death for", gender, "in Taipei in the year", year, ":", example_prediction)
 
-example_prediction = predict_cause_of_death(2022, 'Total (總計)')
-print("Predicted Cause of Death:", example_prediction)
+year = 2050
+gender = 'Total (總計)'
+example_prediction = predict_cause_of_death(year, gender)
+print("Most likely cause of death for", gender, "in Taipei in the year", year, ":", example_prediction)
