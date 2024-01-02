@@ -7,6 +7,7 @@ from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline
 from sklearn.ensemble import GradientBoostingRegressor
 import matplotlib
+import seaborn as sns
 
 # Set the font to a Chinese-compatible font, e.g., SimHei
 matplotlib.rcParams['font.sans-serif'] = ['SimHei'] # Use SimHei font
@@ -70,7 +71,7 @@ synthetic_data['Conclusion'] = synthetic_data.apply(
 table = synthetic_data[['Year (年份)', 'Gender (性別)', 'Cause of Death (疾病死因)', 'Predicted Proportion of Deaths']]
 print(table)
 
-# Visualization - Pie Chart for a specific year
+# Visualization - Bar Chart for a specific year
 specific_year = 2024
 year_data = synthetic_data[synthetic_data['Year (年份)'] == specific_year]
 
@@ -80,8 +81,14 @@ grouped_data = year_data.groupby('Cause of Death (疾病死因)')['Predicted Pro
 # Exclude 'All Causes of Death' from the data
 grouped_data = grouped_data[grouped_data.index != 'All Causes of Death (所有死因)']
 
-# Creating the pie chart
-plt.figure(figsize=(50, 20))
-plt.pie(grouped_data, labels=grouped_data.index, autopct='%1.1f%%', startangle=140)
+# Sorting data from highest to lowest
+grouped_data = grouped_data.sort_values(ascending=False)
+
+# Creating the bar chart
+plt.figure(figsize=(20, 10))  # Adjust figure size as needed
+sns.barplot(x=grouped_data.index, y=grouped_data.values, palette='viridis')
 plt.title(f'Predicted Death Proportions by Cause of Death in {specific_year}')
+plt.ylabel('Predicted Proportion of Deaths')
+plt.xlabel('Cause of Death')
+plt.xticks(rotation=90)  # Rotate x-axis labels to 90 degrees for better alignment
 plt.show()
