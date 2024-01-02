@@ -82,13 +82,15 @@ grouped_data = year_data.groupby('Cause of Death (疾病死因)')['Predicted Pro
 grouped_data = grouped_data[grouped_data.index != 'All Causes of Death (所有死因)']
 
 # Sorting data from highest to lowest
-grouped_data = grouped_data.sort_values(ascending=False)
+grouped_data = grouped_data.sort_values(ascending=False).reset_index()
 
 # Creating the bar chart
 plt.figure(figsize=(20, 10))  # Adjust figure size as needed
-sns.barplot(x=grouped_data.index, y=grouped_data.values, palette='viridis')
+sns.barplot(x='Cause of Death (疾病死因)', y='Predicted Proportion of Deaths', data=grouped_data, 
+            palette='viridis', hue='Cause of Death (疾病死因)', dodge=False)
 plt.title(f'Predicted Death Proportions by Cause of Death in {specific_year}')
 plt.ylabel('Predicted Proportion of Deaths')
 plt.xlabel('Cause of Death')
 plt.xticks(rotation=90)  # Rotate x-axis labels to 90 degrees for better alignment
 plt.show()
+
